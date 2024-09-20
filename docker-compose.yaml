@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  user-service:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "9150:9150"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/atadb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Beulah@333
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JWT_SECRET: mysecretkey
+      JWT_EXPIRATION: 3600000
+    depends_on:
+      - postgres
+    networks:
+      - atanet
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_DB: atadb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Beulah@333
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - atanet
+
+networks:
+  atanet:
+
+volumes:
+  pgdata:
+
